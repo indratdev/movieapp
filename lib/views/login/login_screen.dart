@@ -25,18 +25,17 @@ class _LoginScreenState extends State<LoginScreen> {
         alignment: Alignment.center,
         child: Container(
           height: MediaQuery.sizeOf(context).height / 2.6,
-          margin: EdgeInsets.all(28),
-          padding: EdgeInsets.all(14),
+          margin: const EdgeInsets.all(28),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
               border: Border.all(color: Colors.grey, width: 4)),
           constraints: BoxConstraints(
-            maxWidth: 400, // Adjust the width as needed
+            maxWidth: 600, // Adjust the width as needed
           ),
           child: BlocListener<LoginBloc, LoginState>(
             listener: (context, state) {
-              if (state is LoadingLoginUser) {
-                // showDialog(context: context, builder: (context) => Center( child: const CircularProgressIndicator.adaptive(),));
+              if (state is LoadingLoginUser) {            
                 CustomWidgets.showLoadingWidget(context);
               }
               if (state is FailureLoginUser) {
