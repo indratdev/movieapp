@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/blocs/bloc/login_bloc.dart';
+import 'package:movie_app/blocs/login_bloc/login_bloc.dart';
+import 'package:movie_app/blocs/movie_bloc/movie_bloc.dart';
+
 import 'package:movie_app/shared/colors_app.dart';
 import 'package:movie_app/shared/custom_dialog.dart';
+import 'package:movie_app/views/dashboard/dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,31 +23,38 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Align(
         alignment: Alignment.center,
-        child: Container(     
-          height: MediaQuery.sizeOf(context).height/2.6,
-        margin: EdgeInsets.all(28),
+        child: Container(
+          height: MediaQuery.sizeOf(context).height / 2.6,
+          margin: EdgeInsets.all(28),
           padding: EdgeInsets.all(14),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: Colors.grey, width:4)),
-              constraints: BoxConstraints(
+              border: Border.all(color: Colors.grey, width: 4)),
+          constraints: BoxConstraints(
             maxWidth: 400, // Adjust the width as needed
           ),
           child: BlocListener<LoginBloc, LoginState>(
             listener: (context, state) {
-              if(state is LoadingLoginUser){
+              if (state is LoadingLoginUser) {
                 // showDialog(context: context, builder: (context) => Center( child: const CircularProgressIndicator.adaptive(),));
-                 CustomWidgets.showLoadingWidget(context);
+                CustomWidgets.showLoadingWidget(context);
               }
-               if(state is FailureLoginUser){
+              if (state is FailureLoginUser) {
                 //  Center( child: Text(state.info.toString()),);
                 Navigator.pop(context);
-                CustomWidgets().showMessageAlert(context, state.info.toString(), StatusImage.failed, () => Navigator.pop(context));
+                CustomWidgets().showMessageAlert(context, state.info.toString(),
+                    StatusImage.failed, () => Navigator.pop(context));
               }
-        
-              if(state is SuccessLoginUser){
+
+              if (state is SuccessLoginUser) {
                 Navigator.pop(context);
-                print("Sukses");
+                context.read<MovieBloc>().add(GetRandomMovie());
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DashboardScreen(),
+                    ),
+                    (route) => false);
               }
             },
             child: Column(
