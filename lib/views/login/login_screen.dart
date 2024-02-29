@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/login_bloc/login_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc/movie_bloc.dart';
+import 'package:movie_app/services/language_translation.dart';
 
 import 'package:movie_app/shared/colors_app.dart';
 import 'package:movie_app/shared/custom_dialog.dart';
@@ -31,11 +32,11 @@ class _LoginScreenState extends State<LoginScreen> {
               borderRadius: BorderRadius.circular(14),
               border: Border.all(color: Colors.grey, width: 4)),
           constraints: BoxConstraints(
-            maxWidth: 600, // Adjust the width as needed
+            maxWidth: 600,
           ),
           child: BlocListener<LoginBloc, LoginState>(
             listener: (context, state) {
-              if (state is LoadingLoginUser) {            
+              if (state is LoadingLoginUser) {
                 CustomWidgets.showLoadingWidget(context);
               }
               if (state is FailureLoginUser) {
@@ -47,7 +48,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
               if (state is SuccessLoginUser) {
                 Navigator.pop(context);
-                context.read<MovieBloc>().add(GetRandomMovie());
+                context.read<MovieBloc>()
+                  ..add(GetRandomMovie())
+                  ..add(GetMovieByTitle(title: "war"));
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
@@ -70,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.number,
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
-                      hintText: "Username",
+                      hintText: LanguageTranslation.of(context)!.value('login'),
                       // prefixIcon: FaIcon(FontAwesomeIcons.mobileScreen),
                       prefixIcon: Icon(Icons.person)),
                 ),
@@ -80,8 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.number,
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
-                      hintText: "password",
-                      // prefixIcon: FaIcon(FontAwesomeIcons.lock),
+                      hintText:
+                          LanguageTranslation.of(context)!.value('password'),
                       prefixIcon: Icon(Icons.password)),
                 ),
                 SizedBox(height: 20),
@@ -97,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           password: passwordController.text));
                     },
                     child: Text(
-                      "Log In",
+                      LanguageTranslation.of(context)!.value('login'),
                       style: TextStyle(
                           color: ColorsApp.backgroundDashboardColor,
                           fontSize: MediaQuery.sizeOf(context).width / 18),

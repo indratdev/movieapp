@@ -1,0 +1,20 @@
+{
+    "about_us": "About US",
+    "username": "Username",
+    "password": "Password",
+    "login": "Login",
+    "list-movie": "List Movie",
+    "find-movie": "Find Movie",
+    "favorite": "Favorite",
+    "popular-movie": "Popular Movie",
+    "see-all": "See All",
+    "detail-movie": "Detail Movie",
+    "enter-movie-title": "Enter Movie Title",
+    "no-data": "No Data",
+    "favorite-movie": "Favorite Movie",
+    "title": "Welcome to This Application",
+    "title-des": "This application is designed to meet interview needs. If there are similarities/discrepancies in the content, please forgive,",
+    "contact-us": "Contact Us",
+    "email": "Email",
+    "phone": "Phone"
+  }

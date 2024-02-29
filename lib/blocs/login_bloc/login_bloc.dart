@@ -10,11 +10,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoadingLoginUser());
 
       try {
-        if (event.username == "" && event.password == "") {
-          // aldmic | 123abc123
-          // Future.delayed(Duration(seconds: 3), (){
+        if (event.username == "aldmic" && event.password == "123abc123") {
           emit(SuccessLoginUser(status: true));
-          // });
         } else {
           emit(FailureLoginUser(info: "Failed to Login"));
         }

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:movie_app/blocs/login_bloc/login_bloc.dart';
 import 'package:movie_app/blocs/movie_bloc/movie_bloc.dart';
+import 'package:movie_app/services/language_delegate.dart';
+import 'package:movie_app/shared/colors_app.dart';
 
 import 'package:movie_app/shared/routes.dart';
 
@@ -25,19 +27,36 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        localizationsDelegates: [
+          const TranslationsDelegate(),
+          // GlobalMaterialLocalizations.delegate,
+          // GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', ''),
+          const Locale('id', ''),
+        ],
+        localeResolutionCallback: (locale, supportedLocales) {
+          for (var supportedLocaleLanguage in supportedLocales) {
+            if (supportedLocaleLanguage.languageCode == locale!.languageCode &&
+                supportedLocaleLanguage.countryCode == locale.countryCode) {
+              return supportedLocaleLanguage;
+            }
+          }
+          return supportedLocales.first;
+        },
         debugShowCheckedModeBanner: false,
         routes: AppRoutes().getRoutes,
         initialRoute: AppRoutes.splashScreen,
         theme: ThemeData(
-          primaryColor: const Color(0xffe4e3e8),
-          // appBarTheme: AppBarTheme(
-          //   color: ColorsApp.greenApp,
-          // ),
+          appBarTheme: AppBarTheme(
+            color: ColorsApp.blueMtix,
+          ),
+          colorScheme: const ColorScheme.light(
+            background: ColorsApp.backgroundDashboardColor,
+          ),
         ),
       ),
     );
   }
 }
-
-// Color(0xff4c9acc),
-// Color(0xff325372),

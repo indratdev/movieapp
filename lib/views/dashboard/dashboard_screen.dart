@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_app/blocs/movie_bloc/movie_bloc.dart';
+import 'package:movie_app/services/language_translation.dart';
+import 'package:movie_app/views/about_us_screen/about_us_screen.dart';
 import 'package:movie_app/views/dashboard/controllers/dashboard_controller.dart';
 import 'package:movie_app/shared/colors_app.dart';
+import 'package:movie_app/views/favorite_movie/favorite_movie_screen.dart';
+import 'package:movie_app/views/find_movie/find_movie_screen.dart';
 import 'package:movie_app/views/list_movie/list_movie_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -13,50 +19,61 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final DashboardController controller = DashboardController();
 
+  loadInitail(int screenNumber) {
+    switch (screenNumber) {
+      case 0:
+        context.read<MovieBloc>()
+          ..add(GetRandomMovie())
+          ..add(GetMovieByTitle(title: "war"));
+        break;
+      case 1:
+        context.read<MovieBloc>().add(MovieInitEvent());
+        break;
+
+      case 2:
+        context.read<MovieBloc>().add(GetAllFavoriteEvent());
+        break;
+
+      default:
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _buildBody = <Widget>[
       ListViewMovieScreen(),
-      Scaffold(),
-      Scaffold(),
-      // PlayingScreen(controller: controller),
-      // UpcomingScreen(),
-      // TheaterScreen(),
-      // MfoodScreen(),
-      // MyMtixScreen(),
+      const FindMovieScreen(),
+      const FavoriteMovieScreen(),
+      AboutUsScreen(),
     ];
 
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Image.asset(
-      //     "assets/images/splash.webp",
-      //     fit: BoxFit.cover,
-      //     height: MediaQuery.of(context).size.height / 7,
-      //   ),
-      //   centerTitle: true,
-      // ),
-      // drawer: DrawerDashboardWidget(),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.movie),
-            label: 'List Movie',
+            label: LanguageTranslation.of(context)!.value('list-movie'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: LanguageTranslation.of(context)!.value('find-movie'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
-            label: 'Favorite',
+            label: LanguageTranslation.of(context)!.value('favorite'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_box_outlined),
-            label: 'About US',
+            icon: Icon(Icons.person),
+            label: LanguageTranslation.of(context)!.value('about_us'),
           ),
         ],
         selectedItemColor: ColorsApp.blueMtix,
-        unselectedItemColor: ColorsApp.backgroundDashboardColor,
+        unselectedItemColor: ColorsApp.blueMtix.withOpacity(.2),
         showUnselectedLabels: true,
         currentIndex: controller.getIndexBottomNav,
         onTap: (value) {
           controller.setIndexBottomNav = value;
+          loadInitail(value);
           setState(() {});
         },
       ),
@@ -64,7 +81,3 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 }
-
-final List<Map> myProducts =
-    List.generate(20, (index) => {"id": index, "name": "Product $index"})
-        .toList();
